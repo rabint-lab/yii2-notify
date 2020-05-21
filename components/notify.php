@@ -86,11 +86,11 @@ class notify extends \yii\base\Component
         if ($notify->media & Notification::MEDIA_EMAIL) {
             if ($email) {
                 //var_dump($email);
-                \Yii::$app->mailer->compose('notify', [
+                \Yii::$app->mailer->compose('@common/mail/notify', [
                     'link' => ($notify->link),
                     'text' => ($notify->content),
                 ])
-                    ->setFrom('info@mail.com')
+                    ->setFrom(config('noreplyEmail'))
                     ->setTo($email)
                     ->setSubject(config('app_name'))
                     ->send();
