@@ -2,6 +2,7 @@
 
 namespace rabint\notify\controllers;
 
+use rabint\helpers\user;
 use Yii;
 use rabint\notify\models\Notification;
 use rabint\notify\models\search\NotificationSearch;
@@ -13,11 +14,13 @@ use yii\web\Response;
 /**
  * AdminController implements the CRUD actions for Notification model.
  */
-class AdminController extends \rabint\controllers\AdminController {
+class AdminController extends \rabint\controllers\AdminController
+{
 
     const BULK_ACTION_SETDRAFT = 'bulk-draft';
     const BULK_ACTION_SETPUBLISH = 'bulk-publish';
     const BULK_ACTION_DELETE = 'bulk-delete';
+
     /**
      * @inheritdoc
      */
@@ -34,19 +37,20 @@ class AdminController extends \rabint\controllers\AdminController {
         ]);
     }
 
-     /**
+    /**
      * list of bulk action as static
      * @return array
      */
-    public static function bulkActions() {
+    public static function bulkActions()
+    {
         return [
             //static::BULK_ACTION_SETPUBLISH => ['title' =>  Yii::t('app', 'set publish'),'class'=>'success','icon'=>'fas fa-check'],
             //static::BULK_ACTION_SETDRAFT => ['title' =>  Yii::t('app', 'set draft'),'class'=>'warning','icon'=>'fas fa-times'],
-            static::BULK_ACTION_DELETE => ['title' =>  Yii::t('app', 'delete all'), 'class' => 'danger', 'icon' => 'fas fa-trash-alt'],
+            static::BULK_ACTION_DELETE => ['title' => Yii::t('app', 'delete all'), 'class' => 'danger', 'icon' => 'fas fa-trash-alt'],
         ];
     }
-   
-    
+
+
     /**
      * bulk action
      * @return mixed
@@ -58,36 +62,36 @@ class AdminController extends \rabint\controllers\AdminController {
         $pks = explode(',', $request->post('pks')); // Array or selected records primary keys
 
         if (!isset(static::bulkActions()[$action])) {
-            Yii::$app->session->setFlash('warning',  Yii::t('app', 'Bulk action Not found!'));
+            Yii::$app->session->setFlash('warning', Yii::t('app', 'Bulk action Not found!'));
             return $this->redirect(\rabint\helpers\uri::referrer());
         }
-        $selection = (array) $pks;
+        $selection = (array)$pks;
         $err = 0;
         switch ($action) {
             case static::BULK_ACTION_SETPUBLISH:
                 if (Notification::updateAll(['status' => Notification::STATUS_DRAFT], ['id' => $selection])) {
-                    Yii::$app->session->setFlash('success',  Yii::t('app', 'Bulk action was successful'));
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'Bulk action was successful'));
                 } else {
                     $err++;
                 }
                 break;
             case static::BULK_ACTION_SETDRAFT:
                 if (Notification::updateAll(['status' => Notification::STATUS_DRAFT], ['id' => $selection])) {
-                    Yii::$app->session->setFlash('success',  Yii::t('app', 'Bulk action was successful'));
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'Bulk action was successful'));
                 } else {
                     $err++;
                 }
                 break;
             case static::BULK_ACTION_DELETE:
                 if (Notification::deleteAll(['id' => $selection])) {
-                    Yii::$app->session->setFlash('success',  Yii::t('app', 'Bulk action was successful'));
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'Bulk action was successful'));
                 } else {
                     $err++;
                 }
                 break;
         }
         if ($err) {
-            Yii::$app->session->setFlash('danger',  Yii::t('app', 'عملیات ناموفق بود'));
+            Yii::$app->session->setFlash('danger', Yii::t('app', 'عملیات ناموفق بود'));
         }
 
         if ($request->isAjax) {
@@ -121,6 +125,10 @@ class AdminController extends \rabint\controllers\AdminController {
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        if ($model->user_id == null or $model->user_id == user::id()) {
+            Notification::updateAll(['seen'=>Notification::SEEN_STATUS_YES],['id'=>$model->id]);
+        }
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -140,25 +148,25 @@ class AdminController extends \rabint\controllers\AdminController {
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-                Yii::$app->session->setFlash('success',  Yii::t('app', 'Item successfully created.'));
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Item successfully created.'));
 
                 if ($request->isAjax) {
                     Yii::$app->response->format = Response::FORMAT_JSON;
                     return [
                         'forceReload' => '#ajaxCrudDatatable',
-                        'title' =>  Yii::t('app', 'Create new').' '. Yii::t('app', 'Notification'),
-                        'content' => '<span class="text-success">' .  Yii::t('app', 'Create {item} success', [
-    'item' => '<?= $modelClass ?>',
-]) . '</span>',
-                        'footer' => Html::button( Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                            Html::a( Yii::t('app', 'Create More'), ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                        'title' => Yii::t('app', 'Create new') . ' ' . Yii::t('app', 'Notification'),
+                        'content' => '<span class="text-success">' . Yii::t('app', 'Create {item} success', [
+                                'item' => '<?= $modelClass ?>',
+                            ]) . '</span>',
+                        'footer' => Html::button(Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                            Html::a(Yii::t('app', 'Create More'), ['create'], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
 
                     ];
                 }
                 return $this->redirect(['index']);
             } else {
                 $errors = \rabint\helpers\str::modelErrToStr($model->getErrors());
-                Yii::$app->session->setFlash('danger',  Yii::t('app', 'Unable to create item.')."<br/>".$errors);
+                Yii::$app->session->setFlash('danger', Yii::t('app', 'Unable to create item.') . "<br/>" . $errors);
             }
         }
         return $this->render('create', [
@@ -175,37 +183,37 @@ class AdminController extends \rabint\controllers\AdminController {
     public function actionUpdate($id)
     {
 
-        
+
         $model = $this->findModel($id);
 
         $request = Yii::$app->request;
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-                Yii::$app->session->setFlash('success',  Yii::t('app', 'Item successfully updated.'));
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Item successfully updated.'));
 
                 if ($request->isAjax) {
                     Yii::$app->response->format = Response::FORMAT_JSON;
                     [
                         'forceReload' => '#ajaxCrudDatatable',
-                        'title' =>  Yii::t('app', 'Updating').' '. Yii::t('app', 'Notification'),
+                        'title' => Yii::t('app', 'Updating') . ' ' . Yii::t('app', 'Notification'),
                         'content' => $this->renderAjax('view', [
                             'model' => $model,
                         ]),
-                        'footer' => Html::button( Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
-                            Html::a('Edit', [ Yii::t('app', 'update'), 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
+                        'footer' => Html::button(Yii::t('app', 'Close'), ['class' => 'btn btn-default pull-left', 'data-dismiss' => "modal"]) .
+                            Html::a('Edit', [Yii::t('app', 'update'), 'id' => $id], ['class' => 'btn btn-primary', 'role' => 'modal-remote'])
                     ];
                 }
                 return $this->redirect(['index']);
             } else {
                 $errors = \rabint\helpers\str::modelErrToStr($model->getErrors());
-                Yii::$app->session->setFlash('danger',  Yii::t('app', 'Unable to update item.')."<br/>".$errors);
+                Yii::$app->session->setFlash('danger', Yii::t('app', 'Unable to update item.') . "<br/>" . $errors);
             }
         }
         return $this->render('update', [
             'model' => $model,
         ]);
-                    
+
     }
 
     /**
@@ -219,9 +227,9 @@ class AdminController extends \rabint\controllers\AdminController {
 
         $request = Yii::$app->request;
 
-        if($this->findModel($id)->delete()){
+        if ($this->findModel($id)->delete()) {
             Yii::$app->session->setFlash('success', Yii::t('app', 'Item successfully deleted.'));
-        }else{
+        } else {
             Yii::$app->session->setFlash('danger', Yii::t('app', 'Unable to delete item.'));
         }
 
@@ -231,7 +239,7 @@ class AdminController extends \rabint\controllers\AdminController {
             */
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ['forceClose' => true, 'forceReload' => '#ajaxCrudDatatable'];
-        } 
+        }
 
         return $this->redirect(['index']);
 

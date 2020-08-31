@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="clearfix"></div>
                 <div class="postViewDetail">
-                    <span class="item_stats stats_date" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="<?= \Yii::t('app', 'تاریخ ثبت:'); ?><?= \rabint\locality::jdate('j F Y - H:i', $model->created_at); ?>"><i class="fas fa-calendar"></i><?= \rabint\locality::jdate('j F Y - H:i', $model->created_at); ?></span>
+                    <span class="item_stats stats_date" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="<?= \Yii::t('app', 'تاریخ ثبت:'); ?><?= \rabint\helpers\locality::jdate('j F Y - H:i', $model->created_at); ?>"><i class="fas fa-calendar"></i><?= \rabint\helpers\locality::jdate('j F Y - H:i', $model->created_at); ?></span>
 
                     <?= Html::a(\Yii::t('app', 'حذف این اعلان'), ['delete', 'id' => $model->id], ['data-method' => 'POST', 'class' => 'btn btn-danger btn-sm pull-left']); ?>
                     <div class="pull-left float-left">&nbsp;&nbsp;</div>

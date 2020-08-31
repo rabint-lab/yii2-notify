@@ -14,7 +14,7 @@ use yii\filters\VerbFilter;
 /**
  * DefaultController implements the CRUD actions for Notification model.
  */
-class DefaultController extends \rabint\controllers\DefaultController {
+class DefaultController extends \rabint\controllers\PanelController {
 
     var $layout = '@theme/views/layouts/main';
 
@@ -57,7 +57,7 @@ class DefaultController extends \rabint\controllers\DefaultController {
      */
     public function actionView($id) {
         $model = $this->findModel($id);
-        if ($model->user_id != \rabint\user::id()) {
+        if ($model->user_id !=user::id()) {
             throw new \yii\web\ForbiddenHttpException(\Yii::t('app', 'you dont have Access to this page!'));
         }
         if ($model->seen == Notification::SEEN_STATUS_NO) {

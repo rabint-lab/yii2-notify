@@ -19,7 +19,7 @@ class m190101_111234_create_table_notify extends Migration
             'expire_at' => $this->integer(4)->unsigned()->comment('تاریخ انقضاء'),
             'link' => $this->string(190)->comment('پیوند مرتبط'),
             'content' => $this->text()->comment('متن'),
-            'seen' => $this->tinyInteger(1)->comment('خونده شده'),
+            'seen' => $this->tinyInteger(1)->comment('خونده شده')->defaultValue(\rabint\notify\models\Notification::SEEN_STATUS_NO),
             'media' => $this->integer(11)->unsigned()->comment('نحوه ارسال'),
             'send_status' => $this->integer(11)->comment('وضعیت ارسال'),
             'meta' => $this->text()->comment('متا'),

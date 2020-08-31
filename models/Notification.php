@@ -57,7 +57,7 @@ class Notification extends \yii\db\ActiveRecord
     public static function priorities()
     {
         return [
-            static::MEDIA_MUTE => ['title' => \Yii::t('app', 'معمولی'), 'class' => 'default'],
+            static::MEDIA_MUTE => ['title' => \Yii::t('app', 'فقط اعلان'), 'class' => 'default'],
             static::MEDIA_EMAIL => ['title' => \Yii::t('app', 'ایمیل'), 'class' => 'success'],
             static::MEDIA_SMS => ['title' => \Yii::t('app', 'پیامک'), 'class' => 'warning'],
             static::MEDIA_NOTIFICATION => ['title' => \Yii::t('app', 'نمایش در پنل کاربری'), 'class' => 'primary'],
@@ -120,7 +120,7 @@ class Notification extends \yii\db\ActiveRecord
             'link' => Yii::t('app', 'لینک'),
             'content' => Yii::t('app', 'متن'),
             'seen' => Yii::t('app', 'خوانده شده'),
-            'media' => Yii::t('app', 'الویت'),
+            'media' => Yii::t('app', 'نحوه ارسال'),
             'send_status' => Yii::t('app', 'وضعیت ارسال'),
         ];
     }

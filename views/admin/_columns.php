@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Url;
 
 return [
@@ -17,23 +18,26 @@ return [
     //    'size' => [60, 80],
     // // 'filterOptions' => ['style' => 'max-width:60px;'],
     //],
-   
-    
-        // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'id',
+
+
+    // [
+    // 'class'=>'\kartik\grid\DataColumn',
+    // 'attribute'=>'id',
     // ],
     [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'user_id',
+        'class' => '\kartik\grid\DataColumn',
+        'attribute' => 'user_id',
+        'value' => function ($model) {
+            return ($model->user_id)?$model->user->displayName: Yii::t('app', 'اعلان سیستمی');
+        },
     ],
     // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'created_at',
+    // 'class'=>'\kartik\grid\DataColumn',
+    // 'attribute'=>'created_at',
     // ],
     // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'updated_at',
+    // 'class'=>'\kartik\grid\DataColumn',
+    // 'attribute'=>'updated_at',
     // ],
     [
         'class' => \rabint\components\grid\JDateColumn::class,
@@ -46,14 +50,14 @@ return [
         'dateFormat' => 'j F Y H:i:s',
     ],
     [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'link',
+        'class' => '\kartik\grid\DataColumn',
+        'attribute' => 'link',
     ],
     [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'content',
+        'class' => '\kartik\grid\DataColumn',
+        'attribute' => 'content',
     ],
- 
+
     [
         'class' => \rabint\components\grid\AdvanceEnumColumn::class,
         'attribute' => 'seen',
@@ -66,37 +70,37 @@ return [
         'enum' => \rabint\notify\models\Notification::priorities(),
     ],
     // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'',
+    // 'class'=>'\kartik\grid\DataColumn',
+    // 'attribute'=>'',
     // ],
     // [
-        // 'class'=>'\kartik\grid\DataColumn',
-        // 'attribute'=>'send_status',
+    // 'class'=>'\kartik\grid\DataColumn',
+    // 'attribute'=>'send_status',
     // ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
-        'vAlign'=>'middle',
+        'vAlign' => 'middle',
 
-        'urlCreator' => function($action, $model, $key, $index) { 
-               
-                return Url::to([$action,'id'=>$key]);
+        'urlCreator' => function ($action, $model, $key, $index) {
+
+            return Url::to([$action, 'id' => $key]);
         },
 
-        'urlCreator' => function($action, $model, $key, $index) { 
-                /*if($action=='view'){
-                    return \Yii::$app->urlManagerFrontend->createAbsoluteUrl([$action,'id'=>$model->id]);    
-                }*/
-                return Url::to([$action,'id'=>$key]);
+        'urlCreator' => function ($action, $model, $key, $index) {
+            /*if($action=='view'){
+                return \Yii::$app->urlManagerFrontend->createAbsoluteUrl([$action,'id'=>$model->id]);
+            }*/
+            return Url::to([$action, 'id' => $key]);
         },
-        'viewOptions'=>['role'=>'modal-remote','title'=>Yii::t('app', 'View'),'data-toggle'=>'tooltip'],
-        'updateOptions'=>['role'=>'modal-remote','title'=>Yii::t('app', 'Update'), 'data-toggle'=>'tooltip'],
-        'deleteOptions'=>['role'=>'modal-remote','title'=>Yii::t('app', 'Delete'),
-                          'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
-                          'data-request-method'=>'post',
-                          'data-toggle'=>'tooltip',
-                          'data-confirm-title'=>Yii::t('app', 'Are you sure?'),
-                          'data-confirm-message'=>Yii::t('app', 'Are you sure want to delete this item')         ],
+        'viewOptions' => ['role' => 'modal-remote', 'title' => Yii::t('app', 'View'), 'data-toggle' => 'tooltip'],
+        'updateOptions' => ['role' => 'modal-remote', 'title' => Yii::t('app', 'Update'), 'data-toggle' => 'tooltip'],
+        'deleteOptions' => ['role' => 'modal-remote', 'title' => Yii::t('app', 'Delete'),
+            'data-confirm' => false, 'data-method' => false,// for overide yii data api
+            'data-request-method' => 'post',
+            'data-toggle' => 'tooltip',
+            'data-confirm-title' => Yii::t('app', 'Are you sure?'),
+            'data-confirm-message' => Yii::t('app', 'Are you sure want to delete this item')],
         'template' => '{view} {delete}',
 //        'buttons' => [
 //            'shortlink' => function ($url, $model) {
