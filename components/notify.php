@@ -2,9 +2,10 @@
 
 namespace rabint\notify\components;
 
-use rabint\services\sms\sms;
 use common\models\User;
+use rabint\helpers\str;
 use rabint\notify\models\Notification;
+use rabint\services\sms\sms;
 
 //use ElephantIO\Client;
 //use ElephantIO\Engine\SocketIO\Version2X;
@@ -19,7 +20,12 @@ class notify extends \yii\base\Component
         /* ------------------------------------------------------ */
         $notify = new Notification();
         $notify->user_id = $user_id;
-        $notify->media = isset($params['media']) ? $params['media'] : Notification::MEDIA_MUTE;
+        if(!isset($params['media']) && isset($params['priority'])){
+            $notify->media = isset($params['priority']) ? $params['priority'] : Notification::MEDIA_MUTE;
+        }else{
+            $notify->media = isset($params['media']) ? $params['media'] : Notification::MEDIA_MUTE;
+        }
+        //$notify->media = isset($params['media']) ? $params['media'] : Notification::MEDIA_MUTE;
         $notify->expire_at = !isset($params['expire_time']) ? NULL : time() + $params['expire_time'];
         $notify->link = (!empty($link)) ? \yii\helpers\Url::to($link, TRUE) : NULL;
         $notify->content = $message;
@@ -37,7 +43,11 @@ class notify extends \yii\base\Component
         /* ------------------------------------------------------ */
         $notify = new Notification();
         $notify->user_id = $user_id;
-        $notify->media = isset($params['media']) ? $params['media'] : Notification::MEDIA_MUTE;
+        if(!isset($params['media']) && isset($params['priority'])){
+            $notify->media = isset($params['priority']) ? $params['priority'] : Notification::MEDIA_MUTE;
+        }else{
+            $notify->media = isset($params['media']) ? $params['media'] : Notification::MEDIA_MUTE;
+        }
         $notify->expire_at = !isset($params['expire_time']) ? NULL : time() + $params['expire_time'];
         $notify->link = (!empty($link)) ? \yii\helpers\Url::to($link, TRUE) : NULL;
         $notify->content = $token;
@@ -78,6 +88,7 @@ class notify extends \yii\base\Component
 
         if ($notify->media & Notification::MEDIA_SMS) {
             if ($mobile) {
+                $mobile = str::CellphoneSanitise($mobile,"0");
                 sms::send($mobile, $notify->content);
                 $notify->send_status = $notify->send_status | Notification::MEDIA_SMS;
                 $notify->save(false);
