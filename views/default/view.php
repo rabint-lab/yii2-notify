@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\modules\notify\models\Notification */
 
 $this->title = \Yii::t('app', 'اعلان شماره ') . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Notifications'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'اعلانات'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -25,9 +25,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="postViewDetail">
                     <span class="item_stats stats_date" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="<?= \Yii::t('app', 'تاریخ ثبت:'); ?><?= \rabint\helpers\locality::jdate('j F Y - H:i', $model->created_at); ?>"><i class="fas fa-calendar"></i><?= \rabint\helpers\locality::jdate('j F Y - H:i', $model->created_at); ?></span>
 
-                    <?= Html::a(\Yii::t('app', 'حذف این اعلان'), ['delete', 'id' => $model->id], ['data-method' => 'POST', 'class' => 'btn btn-danger btn-sm pull-left']); ?>
+                    <?php Html::a(\Yii::t('app', 'حذف این اعلان'), ['delete', 'id' => $model->id], ['data-method' => 'POST', 'class' => 'btn btn-danger btn-sm pull-left']); ?>
                     <div class="pull-left float-left">&nbsp;&nbsp;</div>
-                    <?= Html::a(\Yii::t('app', 'پیوند مرتبط اعلان'), $model->link, ['class' => 'btn btn-success btn-sm pull-left']); ?>
+                    <?= isset($model->link)?Html::a(\Yii::t('app', 'پیوند مرتبط اعلان'), $model->link, ['class' => 'btn btn-success btn-sm pull-left']):''; ?>
                     <div class="clearfix"></div>
                 </div>
             </div>

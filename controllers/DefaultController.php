@@ -75,11 +75,13 @@ class DefaultController extends \rabint\controllers\PanelController {
     }
 
     public function actionRemoveAll() {
-        if (\rabint\user::isGuest()) {
+        return;
+        
+        if (user::isGuest()) {
             throw new ForbiddenHttpException(\Yii::t('app', 'درخواست نامعتبر است'));
         }
 
-        $res = Notification::deleteAll(['user_id' => \rabint\user::id()]);
+        $res = Notification::deleteAll(['user_id' => user::id()]);
         if ($res) {
             Yii::$app->session->setFlash('success', \Yii::t('app', 'همه اعلان های شما حذف شد'));
         } else {
@@ -87,10 +89,28 @@ class DefaultController extends \rabint\controllers\PanelController {
         }
         return $this->redirect(['index']);
     }
+    
+    public function actionReadAll() {
+        
+        if (user::isGuest()) {
+            throw new ForbiddenHttpException(\Yii::t('app', 'درخواست نامعتبر است'));
+        }
+
+        $res = Notification::updateAll(['seen'=>Notification::SEEN_STATUS_YES], ['user_id' => user::id(),'seen'=> Notification::SEEN_STATUS_NO]);
+        
+//        if ($res) {
+//            Yii::$app->session->setFlash('success', \Yii::t('app', 'عملیات با موفقیت انجام شد'));
+//        } else {
+//            Yii::$app->session->setFlash('danger', \Yii::t('app', 'هنگام انجام عملیات خطایی رخ داد.'));
+//        }
+        
+        return $this->redirect(['index']);
+    }
 
     public function actionDelete($id) {
+        return;
         $model = $this->findModel($id);
-        if ($model->user_id != \rabint\user::id()) {
+        if ($model->user_id != user::id()) {
             throw new \yii\web\ForbiddenHttpException(\Yii::t('app', 'you dont have Access to this page!'));
         }
         $this->findModel($id)->delete();

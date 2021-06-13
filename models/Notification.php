@@ -132,4 +132,12 @@ class Notification extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+    
+    public static function readStatuses(){
+        return [
+            self::SEEN_STATUS_NO => ['title'=>Yii::t('rabint','خوانده نشده')],
+            self::SEEN_STATUS_YES => ['title'=>Yii::t('rabint','خوانده شده')],
+        ];
+    }
+    
 }
