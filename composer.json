@@ -2,7 +2,7 @@
     "name": "rabint/notify",
     "type": "library",
     "description": "rabint notification manager",
-    "license": "rabint",
+    "license": "MIT",
     "authors": [{
             "name": "rabint",
             "email": "info@rabint.ir",
