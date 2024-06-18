@@ -26,24 +26,27 @@ $this->context->layout = "@themeLayouts/full";
                         </div>
 
                         <div class="card-body block-content">
-                            
+                            <?php
+                            $model->user_id = intval($_GET['user_id']);
+                            $model->link = $_GET['link'];
+                            ?>
                             <?= $form->field($model, 'user_id')->textInput() ?>
 
-                            <?= $form->field($model, 'created_at')->textInput() ?>
+                            <?php //= $form->field($model, 'created_at')->textInput() ?>
 
-                            <?= $form->field($model, 'updated_at')->textInput() ?>
+                            <?php //= $form->field($model, 'updated_at')->textInput() ?>
 
-                            <?= $form->field($model, 'expire_at')->textInput() ?>
+                            <?php //= $form->field($model, 'expire_at')->textInput() ?>
 
                             <?= $form->field($model, 'link')->textInput(['maxlength' => true]) ?>
 
                             <?= $form->field($model, 'content')->textarea(['rows' => 6]) ?>
 
-                            <?= $form->field($model, 'seen')->textInput() ?>
+                            <?php //= $form->field($model, 'seen')->textInput() ?>
 
-                            <?= $form->field($model, 'media')->textInput() ?>
+                            <?php //= $form->field($model, 'media')->textInput() ?>
 
-                            <?= $form->field($model, 'send_status')->textInput() ?>
+                            <?php //= $form->field($model, 'send_status')->textInput() ?>
 
                         </div>
                     </div>

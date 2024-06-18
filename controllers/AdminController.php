@@ -163,7 +163,11 @@ class AdminController extends \rabint\controllers\AdminController
 
                     ];
                 }
-                return $this->redirect(['index']);
+                $redirect = $request->get('redirectTo');
+                if(empty($redirect)){
+                    $redirect = ['index'];
+                }
+                return $this->redirect($redirect);
             } else {
                 $errors = \rabint\helpers\str::modelErrToStr($model->getErrors());
                 Yii::$app->session->setFlash('danger', Yii::t('app', 'Unable to create item.') . "<br/>" . $errors);

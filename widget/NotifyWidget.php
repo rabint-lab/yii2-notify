@@ -6,14 +6,16 @@
  * @copyright (c) rabint, rabint data producers
  */
 
-namespace frontend\modules\notify\widget;
+namespace rabint\notify\widget;
 
+use rabint\helpers\user;
 use  rabint\notify\models\Notification;
+use yii\base\Widget;
 
 /**
  * Class login
  */
-class NotifyWidget extends \yii\bootstrap\Widget {
+class NotifyWidget extends Widget {
 
     var $style = 'default';
     var $menuClass = 'userNotification';
@@ -23,7 +25,7 @@ class NotifyWidget extends \yii\bootstrap\Widget {
     public function run() {
         $items = Notification::find()
                 ->andWhere([
-            'user_id' => \rabint\user::id(),
+            'user_id' => user::id(),
 //            'seen' => Notification::SEEN_STATUS_NO,
         ]);
         if ($this->timeLimit) {
