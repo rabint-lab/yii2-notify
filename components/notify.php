@@ -66,10 +66,10 @@ class notify extends \yii\base\Component
         if ($notify->save(false)) {
             $user = User::findOne($notify->user_id);
             if ($notify->media & Notification::MEDIA_SMS) {
-                $mobile = ($user->userProfile) ? $user->userProfile->cell : '';
+                $mobile = !empty($user->mobile) ? $user->mobile : (($user->userProfile) ? $user->userProfile->cell : '');
                 if ($mobile) {
                     $res = sms::sendVerify($mobile, $param1, $param2 = null, $param3 = null, $template);
-                    $notify->send_status = $notify->send_status | Notification::MEDIA_SMS;
+                    $notify->send_status = $res ? ($notify->send_status | Notification::MEDIA_SMS) : $notify->send_status;
                     $notify->save(false);
                 }
             }

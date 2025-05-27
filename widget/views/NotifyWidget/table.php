@@ -24,7 +24,7 @@ foreach ($items as $item) {
         ?>
         <div class="messageItem noImg <?= ($item->seen == 0) ? 'notRead' : ''; ?>">
             <div class="pmDetial">
-                <a href="<?= Url::to(['/notify/default/view', 'id' => $item->id]); ?>" class="pmTitle modalButton">
+                <a href="<?= Url::to(['/notify/default/view', 'id' => $item->id]); ?>" class="pmTitle modalButton <?= ($item->seen == 0) ? '' : 'text-secondary'; ?>">
                     <?= $item->content; ?>
                 </a>
                 <br/>
